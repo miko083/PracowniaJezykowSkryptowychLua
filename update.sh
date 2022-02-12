@@ -5,4 +5,4 @@ cp -rf /var/source-code/* /var/app/
 cd /var/app
 
 # Compile app
-moonc app.moon
+moonc config.moon app.moon

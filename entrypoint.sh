@@ -3,6 +3,7 @@
 # Update
 /usr/local/bin/update.sh
 
-# Start server
+# Start postgres and lapis server
+/etc/init.d/postgresql start &
 cd /var/app
 lapis server
