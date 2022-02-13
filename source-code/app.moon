@@ -5,6 +5,9 @@ import json_params from require "lapis.application"
 lapis = require "lapis"
 class Products extends Model
 
+class Categories extends Model
+  @primary_key: "name"
+
 class extends lapis.Application
   [index: "/products"]: respond_to {
 
@@ -20,6 +23,7 @@ class extends lapis.Application
       product = Products\create {
         name: @params.name
         price: @params.price
+        categoryname: @params.categoryname
       }
       {
         json: {
@@ -72,5 +76,70 @@ class extends lapis.Application
           success: ifSuccess
         }
       }
+  }
 
+  [index: "/categories"]: respond_to {
+
+    GET: =>
+      result = Categories\select ""
+      {
+        json: {
+          result
+        }
+      }
+
+    POST: json_params =>
+      category = Categories\create {
+        name: @params.name
+      }
+      {
+        json: {
+          success: true
+        }
+      }
+
+  }
+
+  [index: "/categories/:category"]: respond_to {    
+
+    GET: =>
+      result = Products\find categoryname: @params.category
+      {
+          json: {
+            result
+          }
+      }
+    
+    PUT: json_params =>
+      selected_category = Categories\find @params.category
+      ifSuccess = ""
+      if selected_category
+        ifSuccess = true
+      else
+        ifSuccess = false
+      selected_category\update {
+        name: @params.name
+      }
+      {
+        json: {
+          success: ifSuccess
+        }
+      }
+
+    DELETE: =>
+      -- Check if product exists
+      selected_category = Categories\find @params.category
+      ifSuccess = ""
+      if selected_category
+        if selected_category\delete!
+          ifSuccess = true
+      else
+        ifSuccess = false
+       
+      -- Return proper JSON
+      {
+        json: {
+          success: ifSuccess
+        }
+      }
   }
