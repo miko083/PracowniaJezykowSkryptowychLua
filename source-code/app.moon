@@ -32,7 +32,7 @@ class extends lapis.Application
   [product: "/products/:id"]: respond_to {    
 
     GET: =>
-      result = Products\select "where id = ?",@params.id
+      result = Products\find @params.id
       {
           json: {
             result
@@ -41,22 +41,35 @@ class extends lapis.Application
 
     PUT: json_params =>
       product = Products\find @params.id
+      ifSuccess = ""
+      if product
+        ifSuccess = true
+      else
+        ifSuccess = false
       product\update {
         name: @params.name
         price: @params.price
       }
       {
         json: {
-          success: true
+          success: ifSuccess
         }
       }
 
     DELETE: =>
+      -- Check if product exists
       product = Products\find @params.id
-      product\delete!
+      ifSuccess = ""
+      if product
+        if product\delete!
+          ifSuccess = true
+      else
+        ifSuccess = false
+       
+      -- Return proper JSON
       {
         json: {
-          success: true
+          success: ifSuccess
         }
       }
 
