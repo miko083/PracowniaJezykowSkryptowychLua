@@ -103,7 +103,7 @@ class extends lapis.Application
   [index: "/categories/:category"]: respond_to {    
 
     GET: =>
-      result = Products\find categoryname: @params.category
+      result = Products\select "where categoryName = ?", @params.category
       {
           json: {
             result
