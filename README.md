@@ -1,3 +1,9 @@
+## Goals achieved
+
+* 3.0: endpoints for categories and products
+* 3.5: models created with `lapis.db.model`
+* 4.0: all done using MoonScript
+
 ## Docker
 
 ### Docker image
